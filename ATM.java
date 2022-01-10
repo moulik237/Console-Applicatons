@@ -8,7 +8,7 @@ class userdetails {
     public userdetails(String name,int pin,int balance,String acId){
         this.name=name;
         this.pin=pin;
-        this.balance=balance;
+        this.balance=balance; 
         this.acId=acId;
     }
 }
