@@ -31,7 +31,7 @@ public class ATM {
         int tot = 0;
         for (int i = 0; i < 4; i++) {
             System.out.println("No of " + currency[i] + "->" + noOfCurrency[i]);
-            tot += currency[i] * noOfCurrency[i];
+            tot += currency[i] * noOfCurrency[i]; 
         }
         total = tot;
         System.out.println(total);
