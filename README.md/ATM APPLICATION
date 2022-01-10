@@ -1,0 +1,17 @@
+ATM APPLICATION
+Design and Develop a Monolith Console based ATM Application by understanding various use cases from the Customer/User and Administrator point of view. You are allowed to improvise and add more real-time use relevant cases to each task if possible. 
+
+
+Module A : Authentication and Welcome menu 
+Application must authenticate both Borrower and Administrator taking UserID and pin and display a welcome menu based on their role. 
+Module B : Administrator Login
+1.	Update Amount in ATM -> Update must be checked against maximum threshold value of each denomination. Allowed denominations are 2000,500,200,100.
+
+Module C : Customer Login
+1.	Withdraw Amount
+Amount withdrawal based on availability on ATM Machine.
+2.	Check Balance
+Reflect the account balance.
+3.	Pin change
+4.	Direct Deposit
+5.	Amount Transfer
