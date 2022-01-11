@@ -87,9 +87,11 @@ public class ATM {
     public static void pinChange(int k) {
         System.out.println("Enter Your Old Pin : ");
         int n = sc.nextInt();
-        if(n==u[k].pin)
+        if(n==u[k].pin){
             u[k].pin=sc.nextInt();
-        System.out.println("Your Pin Has Been changed Succesfully");
+            System.out.println("Your Pin Has Been changed Succesfully");
+        }
+        else System.out.println("Incorrect Pin");
     }
 
     public static void deposit(int k) {
@@ -210,7 +212,7 @@ public class ATM {
 
     public static void main(String[] args) {
         u[0] = new userdetails("Ram",14,52300,"U1014");
-        u[1] = new userdetails("Arun",24,72300,"U1077");
+        u[1] = new userdetails("Arun",24,72300,"U1024");
         u[2] = new userdetails("Kumar",77,62300,"U1077");
         u[3] = new userdetails("Moulik",92,42300,"U1092");
         int ch = 0;
