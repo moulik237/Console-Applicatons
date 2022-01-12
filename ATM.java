@@ -188,6 +188,8 @@ public class ATM {
                 case 5:
                     amountTransfer(i);
                     break;
+                case 6:
+                    break;
                 default:
                     System.out.println("Invalid Input");
             }
