@@ -1,6 +1,5 @@
 
 
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -77,14 +76,15 @@ class Products {
 }
 
 public class Amazon {
+    
     static Scanner sc = new Scanner(System.in);
     public static ArrayList<User> userList = new ArrayList<>();
     public static ArrayList<Merchant> merchantList = new ArrayList<>();
-    public static ArrayList<Approval> approvalList = new ArrayList<Approval>();
+    public static ArrayList<Approval> approvalList = new ArrayList<>();
     public static ArrayList<Products> productList = new ArrayList<>();
     public static ArrayList<Orders> orderList = new ArrayList<>();
 
-
+    // To check Existing Business Name in merchantList,returns true if business name not found
     public static boolean checkExistingUs(String name){
         for(int i=0;i<merchantList.size();i++){
             if(merchantList.get(i).businessName.equals(name)){
@@ -93,6 +93,7 @@ public class Amazon {
         }
         return true;
     }
+    // To check Existing Business Name in approvalList,returns true if business name not found
     public static boolean checkExistingInApproval(String name){
         for(int i=0;i<approvalList.size();i++){
             if(approvalList.get(i).businessName.equals(name)){
@@ -101,8 +102,8 @@ public class Amazon {
         }
         return true;
     }
-
-
+    
+    // To approve/reject merchant login request,approved details will be added to merchantList,rejected details will be deleted from approvalList
     public static void merchantApproval() {
         for(int i=0;i<approvalList.size();i++){
             if(approvalList.get(i).status.equals("No")){
@@ -124,6 +125,7 @@ public class Amazon {
         }
         System.out.println("No more Pending Approvals");
     }
+    // To add merchant by admin,details will be added to merchantList
     public static void addMerchant() {
         System.out.println("Enter Business Name");
         sc.nextLine();
@@ -142,6 +144,7 @@ public class Amazon {
         }
 
     }
+    // To remove merchant by admin,details will be removed from merchantList
     public static void removeMerchant() {
         System.out.println("Enter Merchant Business Name to Remove : ");
         sc.nextLine();
@@ -159,6 +162,7 @@ public class Amazon {
             System.out.println("Merchant Business Name Not Found!");
         }
     }
+    // List all products from productList
     public static void listAllProducts() {
         for(int i=0;i<productList.size();i++){
             if(productList.get(i).noOfUnits>0) {
@@ -169,7 +173,8 @@ public class Amazon {
             }
         }
     }
-
+    
+    // New merchant Sign in
     public static void becomeMerchant() {
         System.out.println("Enter Business Name");
         sc.nextLine();
@@ -187,6 +192,7 @@ public class Amazon {
             System.out.println("Business Name already Exist");
         }
     }
+    // To get merchant ID
     public static void getMerchantId(){
         System.out.println("Enter Business Name to get ID: ");
         sc.nextLine();
@@ -220,24 +226,19 @@ public class Amazon {
                 System.out.println("Business Name Not Found !");
         }
     }
+    // Merchant Login verification
     public static void merchantLogin() {
         System.out.println("Enter Merchant ID and Password");
         String merchantId = sc.next();
         int merchantPassword = sc.nextInt();
-//        boolean flag = checkExistingUs(merchantName);
-//        int pro = 0;
         for(int i=0;i<merchantList.size();i++){
             if(merchantList.get(i).iD.equals(merchantId) && merchantList.get(i).password==merchantPassword){
                 merchantFunction(i);
-//                pro++;
             }
         }
-//        if(pro==0){
-//            System.out.println("Check Merchant ID and Password");
-//            break;
-//        }
     }
-
+    
+    // return no of product's the user is selling 
     public static int noOfProduct(String k){
         int n=0;
         for(int i=0;i<productList.size();i++){
@@ -247,6 +248,7 @@ public class Amazon {
         }
         return n;
     }
+    // Merchant function
     public static void merchantFunction(int k){
         int meOp = 0;
         do {
@@ -281,6 +283,7 @@ public class Amazon {
             }
         } while (meOp != 5);
     }
+    // To add products by merchant,details will be added to productList
     public static void addProducts(int k,int n){
         int pNo = n+101;
         System.out.println("Enter Product Name : ");
@@ -295,6 +298,7 @@ public class Amazon {
         Products addProduct = new Products(pNo,pName,pId,aUnit,pPrice,dPrice,merchantList.get(k).iD);
         productList.add(addProduct);
     }
+    // To update product details by merchant,details will be updated in productList
     public static void updateProduct(){
         System.out.println("Enter product ID : ");
         sc.nextLine();String pId = sc.nextLine();
@@ -341,6 +345,7 @@ public class Amazon {
             }
         }while(up!=5);
     }
+    // To remove products by merchant,details will be removed from productList
     public static void removeProducts(int k){
         System.out.println("Enter product ID : ");
         sc.nextLine();String pId = sc.nextLine();
@@ -354,6 +359,7 @@ public class Amazon {
         }
         System.out.println("product Removed Successfully");
     }
+    // Will list all products sold by merchant from productList
     public static void listMyProduct(int k){
         String a = merchantList.get(k).iD;
         for(int i=0;i<productList.size();i++){
@@ -365,7 +371,8 @@ public class Amazon {
             }
         }
     }
-
+    
+    // Return product index No in productList
     public static int productId(String productId){
         int i;
         for(i=0;i<productList.size();i++){
@@ -375,16 +382,18 @@ public class Amazon {
         }
         return i;
     }
+    // List All products and total cost in users cart from orderList 
     public static void viewProduct(int k){
         int total = 0;
         for(int i=0;i<orderList.size();i++){
             if(userList.get(k).usId.equals(orderList.get(i).userId)){
-                System.out.println("Product ID : "+orderList.get(i).productId+" No of Units : "+orderList.get(i).noUnits);
+                System.out.println("Product ID : "+orderList.get(i).productId+";  No of Units : "+orderList.get(i).noUnits);
                 total+=orderList.get(i).price*orderList.get(i).noUnits;
             }
         }
         System.out.println("Total Amount : Rs."+total+".00");
     }
+    // Remove products in users cart from orderList 
     public static void removeProduct(int k){
         System.out.println("Enter Remove product ID");
         sc.nextLine();
@@ -396,6 +405,8 @@ public class Amazon {
             }
         }
     }
+    
+    // View cart and actions
     public static void viewCart(int k) {
         int ch=0;
         do{
@@ -411,7 +422,7 @@ public class Amazon {
                 case 2:
                     for(int i=0;i<orderList.size();i++){
                         if(userList.get(k).usId.equals(orderList.get(i).userId)){
-                            System.out.println("Product ID : "+orderList.get(i).productId+"; No of Units : "+orderList.get(i).noUnits);
+                            System.out.println("Product ID : "+orderList.get(i).productId+";  No of Units : "+orderList.get(i).noUnits);
                         }
                     }
                     removeProduct(k);
@@ -426,6 +437,7 @@ public class Amazon {
             }
         }while (ch!=4);
     }
+    // Return product price
     public static int productPrice(String productId){
         int price=0;
         for(int i=0;i<productList.size();i++){
@@ -435,6 +447,7 @@ public class Amazon {
         }
         return price;
     }
+    // To add products to cart
     public static void addToCart(int k){
         int no=0;
         System.out.println("Enter no of Items : ");
@@ -449,6 +462,7 @@ public class Amazon {
             orderList.add(addToCart);
         }
     }
+    // To Check Out
     public static void checkOut(int k){
         int total = 0;
         for(int i=0;i<orderList.size();i++) {
@@ -461,6 +475,7 @@ public class Amazon {
         userList.get(k).balance-=total;
         System.out.println("Thanks for Shopping !");
     }
+    // User actions
     public static void UserFunction(int k){
         int usOp = 0;
         do {
@@ -492,6 +507,7 @@ public class Amazon {
             }
         } while (usOp != 5);
     }
+    //User Sign in
     public static void userSignup() {
         System.out.println("Enter User Mail ID : ");
         sc.nextLine();String usMail = sc.nextLine();
@@ -502,6 +518,7 @@ public class Amazon {
         User user = new User(usMail,usPassword,usBalance,"UID"+(userList.size()+1));
         userList.add(user);
     }
+    //User Login
     public static void userLogin() {
         System.out.println("Enter User Mail ID : ");
         sc.nextLine();String usMail = sc.nextLine();
@@ -515,7 +532,8 @@ public class Amazon {
             }
         }
     }
-
+    
+    //Admin actions
     public static void admin() {
         System.out.println("You Have Chosen Admin Login");
         System.out.println("Enter Admin Name and Password");
@@ -556,6 +574,7 @@ public class Amazon {
             System.out.println("check Admin Name and Password");
         }
     }
+    //Merchant actions
     public static void merchant(){
         int meOp=0;
         do{
@@ -583,6 +602,7 @@ public class Amazon {
             }
         }while(meOp!=4);
     }
+    //User actions
     public static void user() {
         int usOp=0;
         do{
@@ -607,7 +627,7 @@ public class Amazon {
             }
         }while(usOp!=3);
     }
-
+    
     public static void main(String[] args) {
         Merchant u1 = new Merchant("business 1",12345,"Yes","MID1");
         Merchant u2 = new Merchant("business 2",12345,"Yes","MID2");
