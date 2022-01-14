@@ -178,13 +178,13 @@ public class Shopping {
     }
     // List all products in productList
     public static void listAllProducts() {
-        System.out.println("Product_No Product_Name Product_ID No_Of_Units Product_Price Discount_Price Merchant_ID");
+        System.out.println("S_No Product_Name Product_ID No_Of_Units Product_Price Discount_Price Merchant_ID");
         for(int i=0;i<productList.size();i++){
             if(productList.get(i).noOfUnits>0) {
-                System.out.println( (i+1)+"."+ "         " + productList.get(i).productName
-                        + "     " + productList.get(i).productId + "      " + productList.get(i).noOfUnits
-                        + "         " + productList.get(i).price + "         " + productList.get(i).disPrice
-                        + "            " + productList.get(i).merID);
+                System.out.println((i+1)+String.format("%-5s",".")+String.format("%-13s", productList.get(i).productName)
+                        +String.format("%-11s", productList.get(i).productId) + String.format("%-12s", productList.get(i).noOfUnits)
+                        +String.format("%-14s", productList.get(i).price)  +String.format("%-15s",productList.get(i).disPrice)
+                        + String.format("%-10s", productList.get(i).merID));
             }
         }
     }
@@ -387,12 +387,13 @@ public class Shopping {
         int n = noOfProduct(merchantList.get(k).iD);
         if(n>0) {
         String a = merchantList.get(k).iD;
+            System.out.println("Product_No Product_Name Product_ID No_Of_Units Product_Price Discount_Price Merchant_ID");
             for(int i=0;i<productList.size();i++){
                 if(productList.get(i).merID.equals(a)){
-                    System.out.println(productList.get(i).productNo+" "+productList.get(i).productName
-                            +" "+productList.get(i).productId+" "+productList.get(i).noOfUnits
-                            +" "+productList.get(i).price+" "+productList.get(i).disPrice
-                            +" " +productList.get(i).merID);
+                    System.out.println(String.format("%-12s",productList.get(i).productNo)+String.format("%-13s", productList.get(i).productName)
+                            +String.format("%-11s", productList.get(i).productId) + String.format("%-12s", productList.get(i).noOfUnits)
+                            +String.format("%-14s", productList.get(i).price)  +String.format("%-15s", productList.get(i).disPrice)
+                            + String.format("%-10s", productList.get(i).merID));
                 }
             }
         }else System.out.println("No Product Found!");
