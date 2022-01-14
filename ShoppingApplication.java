@@ -60,6 +60,7 @@ class Orders {
     }
 }
 class Products {
+
     int productNo;
     String productName;
     String productId;
@@ -79,13 +80,14 @@ class Products {
     }
 }
 
-public class Amazon {
+public class Shopping {
     static Scanner sc = new Scanner(System.in);
     public static ArrayList<User> userList = new ArrayList<>();
     public static ArrayList<Merchant> merchantList = new ArrayList<>();
     public static ArrayList<Approval> approvalList = new ArrayList<>();
     public static ArrayList<Products> productList = new ArrayList<>();
     public static ArrayList<Orders> orderList = new ArrayList<>();
+    static int userBill = 0;
 
     // To check Existing Business Name in merchantList,returns true if business name not found
     public static boolean checkExistingMe(String name){
@@ -98,7 +100,7 @@ public class Amazon {
     }
     // To check Existing Business Name in approvalList,returns true if business name not found
     public static boolean checkExistingInUser(String mailId){
-        for(int i=0;i<merchantList.size();i++){
+        for(int i=0;i<userList.size();i++){
             if(userList.get(i).mailID.equals(mailId)){
                 return false;
             }
@@ -114,6 +116,7 @@ public class Amazon {
         }
         return true;
     }
+
     // To approve/reject merchant login request,approved details will be added to merchantList,rejected details will be deleted from approvalList
     public static void merchantApproval() {
         for(int i=0;i<approvalList.size();i++){
@@ -153,6 +156,7 @@ public class Amazon {
         } else {
             System.out.println("Business Name already Exist");
         }
+
     }
     // To remove merchant by admin,details will be removed from merchantList
     public static void removeMerchant() {
@@ -177,12 +181,14 @@ public class Amazon {
         System.out.println("Product_No Product_Name Product_ID No_Of_Units Product_Price Discount_Price Merchant_ID");
         for(int i=0;i<productList.size();i++){
             if(productList.get(i).noOfUnits>0) {
-                System.out.println(productList.get(i).productNo + "        " + productList.get(i).productName
+                System.out.println( (i+1)+"."+ "         " + productList.get(i).productName
                         + "     " + productList.get(i).productId + "      " + productList.get(i).noOfUnits
-                        + "         " + productList.get(i).price + "         " + productList.get(i).disPrice+ "            " + productList.get(i).merID);
+                        + "         " + productList.get(i).price + "         " + productList.get(i).disPrice
+                        + "            " + productList.get(i).merID);
             }
         }
     }
+
     // New merchant Sign in
     public static void becomeMerchant() {
         System.out.println("Enter Business Name : ");
@@ -237,7 +243,7 @@ public class Amazon {
         }
     }
     // Merchant Login verification
-    public static void merchantLogin() {
+    public static void merchantSigning() {
         System.out.println("----- You Have Chosen Merchant Login ----- ");
         System.out.println("Enter Merchant ID : ");
         String merchantId = sc.next();
@@ -250,6 +256,7 @@ public class Amazon {
             }
         }
     }
+
     // return no of product's the user is selling
     public static int noOfProduct(String k){
         int n=0;
@@ -390,6 +397,7 @@ public class Amazon {
             }
         }else System.out.println("No Product Found!");
     }
+
     // Return product index No in productList
     public static int productId(String productId){
         int i;
@@ -423,6 +431,7 @@ public class Amazon {
             }
         }
     }
+
     // View cart and actions
     public static void viewCart(int k) {
         int ch=0;
@@ -433,21 +442,18 @@ public class Amazon {
             ch=sc.nextInt();
             switch (ch) {
                 case 1:
-                    int total = totalPrice(k);
-                    // works if user bill is not 0
-                    if(total>0) {
+                    if(userBill>0) {
                         for (int i = 0; i < orderList.size(); i++) {
                             if (userList.get(k).usId.equals(orderList.get(i).userId)) {
                                 System.out.println("Product ID : " + orderList.get(i).productId + ";  Product Name : " + orderList.get(i).pName + ";  No of Units : " + orderList.get(i).noUnits);
                             }
                         }
+                        removeProduct(k);
                     }else System.out.println("No Product Found on Your Cart!\n Add Product To Your Cart");
-                    removeProduct(k);
                     break;
                 case 2:
-                    int totalp = totalPrice(k);
-                    // this works if user bill is not 0
-                    if(totalp>0) {
+
+                    if(userBill>0) {
                         checkOut(k);
                     }else System.out.println("No Product Found on Your Cart!\n Add Product To Your Cart");
                     break;
@@ -493,6 +499,7 @@ public class Amazon {
             Orders addToCart = new Orders(userList.get(k).usId,productId,noUnits,proPrice,pName);
             orderList.add(addToCart);
         }
+        userBill = totalPrice(k);
     }
     // To Check Out
     public static void checkOut(int k){
@@ -503,12 +510,14 @@ public class Amazon {
                 total+=orderList.get(i).price*orderList.get(i).noUnits;
                 productList.get(a).noOfUnits-=orderList.get(i).noUnits;
                 orderList.remove(i);
+                userBill=total;
             }
         }
         userList.get(k).balance-=total;
+        userBill=0;
         System.out.println("Thanks for Shopping!");
     }
-    // Return User Cart Total Amount
+    // Return User Bill Amount
     public static int totalPrice(int k){
         int total = 0;
         for(int i=0;i<orderList.size();i++){
@@ -526,8 +535,7 @@ public class Amazon {
             System.out.println("1.View Product");
             System.out.println("2.View Cart");
             System.out.println("3.Check Balance");
-            System.out.println("4.Check Out");
-            System.out.println("5.Exit");
+            System.out.println("4.Exit");
             System.out.print("Enter Your Choice : ");
             usOp = sc.nextInt();
             switch (usOp) {
@@ -536,9 +544,7 @@ public class Amazon {
                     addToCart(k);
                     break;
                 case 2:
-                    int totalP = totalPrice(k);
-                    // this works if user bill is not 0
-                    if(totalP>0) {
+                    if(userBill>0) {
                         viewProduct(k);
                         viewCart(k);
                     }else System.out.println("No Product Found on Your Cart!\n Add Product To Your Cart");
@@ -546,17 +552,11 @@ public class Amazon {
                 case 3:
                     System.out.println("Your Balance : "+userList.get(k).balance);
                     break;
-                case 4:
-                    int total = totalPrice(k);
-                    if(total>0) {
-                        checkOut(k);
-                    }else System.out.println("No Product Found on Your Cart!\n Add Product To Your Cart");
-                    break;
                 default:
                     System.out.println("Invalid Input!");
                     break;
             }
-        } while (usOp != 5);
+        } while (usOp != 4);
     }
     //User Sign in
     public static void userSignup() {
@@ -573,10 +573,11 @@ public class Amazon {
             int usBalance = sc.nextInt();
             User user = new User(usMail, usPassword, usName, usBalance, "UID" + (userList.size() + 1));
             userList.add(user);
+            System.out.println("Account Created Successfully!");
         }else System.out.println("User Mail ID Already Exist!");
     }
     //User Login
-    public static void userLogin() {
+    public static void userSigning() {
         System.out.println("----- You Have Chosen User Login ----- ");
         System.out.println("Enter User Mail ID : ");
         String usMail = sc.next();
@@ -593,6 +594,7 @@ public class Amazon {
         }
         if(pro==0) System.out.println("User ID and Password Mismatch! \nRetry!");
     }
+
     //Admin actions
     public static void admin() {
         System.out.println("----- You Have Chosen Admin Login -----");
@@ -642,7 +644,7 @@ public class Amazon {
         System.out.println("----- You Have Chosen Merchant Login -----");
         System.out.println("1. Become a Merchant");
         System.out.println("2. Get Merchant ID");
-        System.out.println("3. Merchant Login");
+        System.out.println("3. Merchant Signing");
         System.out.println("4. Exit");
         System.out.println("Enter Choice : ");
         meOp = sc.nextInt();
@@ -654,7 +656,7 @@ public class Amazon {
                     getMerchantId();
                     break;
                 case 3:
-                    merchantLogin();
+                    merchantSigning();
                     break;
                 case 4:
                     break;
@@ -669,7 +671,7 @@ public class Amazon {
         do{
         System.out.println("----- You Have Chosen User Login -----");
         System.out.println("1.User Signup");
-        System.out.println("2.User Login");
+        System.out.println("2.User Signing");
         System.out.println("3.Exit");
         System.out.println("Enter Choice : ");
         usOp = sc.nextInt();
@@ -678,7 +680,7 @@ public class Amazon {
                     userSignup();
                     break;
                 case 2:
-                    userLogin();
+                    userSigning();
                     break;
                 case 3:
                     break;
@@ -688,6 +690,7 @@ public class Amazon {
             }
         }while(usOp!=3);
     }
+
     public static void main(String[] args) {
         Merchant u1 = new Merchant("business 1",12345,"Charan","Yes","MID1");
         Merchant u2 = new Merchant("business 2",12345,"Arun","Yes","MID2");
@@ -704,7 +707,7 @@ public class Amazon {
             System.out.println("----- Welcome To Shopping -----");
             System.out.println("1.Admin Login");
             System.out.println("2.Merchant Login");
-            System.out.println("3.User");
+            System.out.println("3.User Login");
             System.out.println("4.Exit");
             System.out.print("Enter Choice : ");
             ch = sc.nextInt();
