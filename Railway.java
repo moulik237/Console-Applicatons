@@ -63,10 +63,12 @@ public class Railway {
     static ArrayList<ApprovalUser> appUser = new ArrayList<>();
     static ArrayList<waitingList> waitingLis = new ArrayList<>();
 
+    // To approve/reject user login request,approved details will be added to userList,rejected details will be deleted from waitingLList
     static void approveUser(){
         int i=0;
-        while (i<appUser.size()) {
-                System.out.println("User Name : "+appUser.get(i).name);
+        while (true) {
+            if (i >= appUser.size()) break;
+            System.out.println("User Name : "+appUser.get(i).name);
                 System.out.println("1.Approve or 2.Reject");
                 int approval = sc.nextInt();
             if (approval == 1) {
@@ -83,6 +85,7 @@ public class Railway {
         }
         System.out.println("No more Pending Approvals");
         }
+    // To add Train
     static void addTrain() {
         System.out.println("Enter Train Name : ");
         sc.nextLine();String tName = sc.nextLine();
@@ -107,6 +110,7 @@ public class Railway {
         Train newTrain = new Train(tName,bName,dName,noOfStation,noOfSeat,st,0,seatAlotted);
         trains.add(newTrain);
     }
+    // To declare Seat availability
     static void decSeat() {
         System.out.println("Train Name");
         int i = 0;
@@ -123,6 +127,7 @@ public class Railway {
             trains.get(n - 1).noOfSeat = noOfS;
         }else System.out.println("Invalid Input!");
     }
+    // To Display train details
     static void trainDetails(){
         viewTrains();
         System.out.println("Enter Train Name : ");
@@ -136,44 +141,114 @@ public class Railway {
                         train.noOfSeat, train.noOfSeatAlotted));
 
             }
+            System.out.println("Seat Allotment : ");
+            for (int i = 0; i < train.noOfSeat; i++) {
+                for (int j = 0; j < train.noOfStation; j++) {
+                    System.out.print(train.seatAlotted[i][j]);
+                }
+                System.out.println();
+            }
+            break;
         }
     }
-    static void admin(){
-        System.out.println("Enter Your Name : ");
-        sc.nextLine();String aName = sc.nextLine();
-        System.out.println("Enter Your Password : ");
-        String aPassword = sc.nextLine();
-        if(aName.equals("admin")&&aPassword.equals("12345")) {
-            int adCh = 0;
-            do {
-                System.out.println("1.Username authentication");
-                System.out.println("2.Add Trains, Routes and Stations");
-                System.out.println("3.Declare Seats Availability");
-                System.out.println("4.View Train Details");
-                System.out.println("5.Exit");
-                System.out.println("Enter Choice : ");
-                adCh = sc.nextInt();
-                switch (adCh) {
-                    case 1:
-                        approveUser();
+
+    // Return available ticket Count
+    static int availTic(Train train, int noOfPassengers, int st, int en){
+        int availableTicket = 0;
+        for (int k = 0; k < noOfPassengers; k++) {
+            int seat = 0;
+            if(k<train.noOfSeat) {
+                for (int i = 0; i < train.noOfSeat; i++) {
+                    for (int i1 = st; i1 < en; i1++) {
+                        if (train.seatAlotted[i][i1] != 0 ) {
+                            break;
+                        } else seat++;
+                    }
+                    if (seat == en - st) {
+                        ++availableTicket;
+                        for (int i1 = st - 1; i1 < en; i1++) {
+                            train.seatAlotted[i][i1] = 99;
+                        }
                         break;
-                    case 2:
-                        addTrain();
-                        break;
-                    case 3:
-                        decSeat();
-                        break;
-                    case 4:
-                        trainDetails();
-                        break;
-                    case 5:
-                        break;
-                    default:
-                        System.out.println("Invalid Input");
+                    }
                 }
-            } while (adCh != 4);
-        }else System.out.println("Incorrect Admin Name and Password!");
+            }else break;
+        }
+        for (int i = 0; i < train.noOfSeat; i++) {
+            for (int j = 0; j < train.noOfStation; j++) {
+                if(train.seatAlotted[i][j]==99) train.seatAlotted[i][j]=0;
+            }
+        }
+        return availableTicket;
     }
+    // allot ticket
+    static void allotTicket(Train train, int noOfPassengers, int st, int en, int availableTicket){
+        int allotted = train.noOfSeatAlotted;
+        if(allotted==0) allotted++;
+        if(availableTicket>0) {
+            int k = 0;
+            while (k < noOfPassengers) {
+                int seat = 0;
+                for (int i = 0; i < train.noOfSeat; i++) {
+                    for (int i1 = st; i1 < en; i1++) {
+                        if (train.seatAlotted[i][i1] != 0) {
+                            break;
+                        } else seat++;
+                    }
+                    if (seat == en - st) {
+
+                        for (int i1 = st - 1; i1 < en; i1++) {
+                            train.seatAlotted[i][i1] = allotted;
+                        }
+                        System.out.println("Your Seat No is : " + (i + 1) + "\nYour Ticket No : " + allotted++);
+                        break;
+                    }
+                }
+                k++;
+            }
+            train.noOfSeatAlotted = allotted;
+            for (int i = 0; i < train.noOfSeat; i++) {
+                for (int j = 0; j < train.noOfStation; j++) {
+                    System.out.print(train.seatAlotted[i][j]);
+                }
+                System.out.println();
+            }
+        }
+        if(noOfPassengers-availableTicket>0){
+            waitingList wl = new waitingList(train,(noOfPassengers-availableTicket),st,en);
+            waitingLis.add(wl);
+        }
+    }
+    // allot ticket for waiting list passengers
+    static void WaitingLisAllot(Train train, int noOfPassengers, int st, int en, int availableTicket){
+        int allotted = train.noOfSeatAlotted;
+        if(availableTicket>0) {
+            for (int k = 0; k < noOfPassengers; k++) {
+                int seat = 0;
+                for (int i = 0; i < train.noOfSeat; i++) {
+                    for (int i1 = st; i1 < en; i1++) {
+                        if (train.seatAlotted[i][i1] != 99) {
+                            break;
+                        } else seat++;
+                    }
+                    if (seat == en - st) {
+                        ++allotted;
+                        for (int i1 = st - 1; i1 < en; i1++) {
+                            train.seatAlotted[i][i1] = allotted;
+                        }
+                        break;
+                    }
+                }
+            }
+            train.noOfSeatAlotted = allotted;
+        }
+
+        if(noOfPassengers!=availableTicket){
+            waitingList wl = new waitingList(train,(noOfPassengers-availableTicket),st,en);
+            waitingLis.add(wl);
+        }
+    }
+    //User Sign up
     static void userSignup() {
         System.out.println("Enter Your Mobile No : ");
         int uPhoneNo = sc.nextInt();
@@ -198,92 +273,52 @@ public class Railway {
             System.out.println("Account Created Successfully! \nWaiting for Approval! ");
         }else System.out.println("User Mobile No is Already Exist!");
     }
+    //User Sign in
+    public static void userSigning() {
+        System.out.println("----- You Have Chosen User Login ----- ");
+        System.out.println("Enter User Mobile No : ");
+        int usMobileNo = sc.nextInt();
+        System.out.println("Enter User Password : ");
+        sc.nextLine();String usPassword = sc.nextLine();
+        int pro=0;
+        for(int i=0;i<user.size();i++){
+            if(user.get(i).phoneNo==usMobileNo && user.get(i).password.equals(usPassword)){
+                UserFunction(i);
+                pro++;
+                break;
+            }
+        }
+        if(pro==0) System.out.println("User ID and Password Mismatch! \nRetry!");
+    }
+    // User actions
+    static void UserFunction(int u){
+        int usCh=0;
+        do{
+            System.out.println("1.View Trains and Availability");
+            System.out.println("2.Book Tickets");
+            System.out.println("3.Ticket Cancellation");
+            System.out.println("4.Exit");
+            System.out.println("Enter Choice : ");
+            usCh = sc.nextInt();
+            if(usCh == 1) {
+                viewTrains();
+            } else if (usCh == 2) {
+                viewTrains();
+                bookTicket();
+            } else if (usCh == 3) {
+                viewTrains();
+                ticketCancel();
+            } else {
+                System.out.println("Invalid Input");
+            }
+        }while (usCh!=4);
+    }
+    // To view available train's
     static void viewTrains() {
         System.out.println("SNo  Train_Name          Boarding_Point     Destination_Point");
         IntStream.range(0, trains.size()).mapToObj(i -> String.format("%-4s %-20s %-18s %-19s", (i + 1), trains.get(i).TrainName, trains.get(i).startPoint, trains.get(i).endPoint)).forEach(System.out::println);
     }
-    static int availTic(Train train, int noOfPassengers, int st, int en){
-        int availableTicket = 0;
-        for (int k = 0; k < noOfPassengers; k++) {
-            int seat = 0;
-            if(k<train.noOfSeat) {
-                for (int i = 0; i < train.noOfSeat; i++) {
-                    for (int i1 = st; i1 < en; i1++) {
-                        if (train.seatAlotted[i][i1] != 0 ) {
-                            break;
-                        } else seat++;
-                    }
-                    if (seat == en - st) {
-                        ++availableTicket;
-                    }
-                }
-            }else break;
-        }
-       return availableTicket;
-    }
-    static void allotTicket(Train train, int noOfPassengers, int st, int en, int availableTicket){
-        int allotted = train.noOfSeatAlotted;
-        if(availableTicket>0) {
-            int k = 0;
-            while (k < noOfPassengers) {
-                int seat = 0;
-                for (int i = 0; i < train.noOfSeat; i++) {
-                    for (int i1 = st; i1 < en; i1++) {
-                        if (train.seatAlotted[i][i1] != 0) {
-                            break;
-                        } else seat++;
-                    }
-                    if (seat == en - st) {
-                        System.out.println("Your Seat No is : " + (i + 1) + "\nYour Ticket No : " + ++allotted);
-                        for (int i1 = st - 1; i1 < en; i1++) {
-                            train.seatAlotted[i][i1] = allotted;
-                        }
-                        break;
-                    }
-                }
-                k++;
-            }
-            train.noOfSeatAlotted = allotted;
-        }
-        if(noOfPassengers-availableTicket>0){
-            waitingList wl = new waitingList(train,(noOfPassengers-availableTicket),st,en);
-            waitingLis.add(wl);
-        }
-    }
-    static void waitingAllot(){
-        for (waitingList waitingLi : waitingLis) {
-            int n = availTic(waitingLi.train,waitingLi.noOfPassengers,waitingLi.st,waitingLi.en);
-            if (n>0){
-                WaitingLisAllot(waitingLi.train,waitingLi.noOfPassengers,waitingLi.st, waitingLi.en,n);
-            }
-        }
-    }
-    static void WaitingLisAllot(Train train, int noOfPassengers, int st, int en, int availableTicket){
-        int allotted = train.noOfSeatAlotted;
-        if(availableTicket>0) {
-            for (int k = 0; k < noOfPassengers; k++) {
-                int seat = 0;
-                for (int i = 0; i < train.noOfSeat; i++) {
-                    for (int i1 = st; i1 < en; i1++) {
-                        if (train.seatAlotted[i][i1] != 0) {
-                            break;
-                        } else seat++;
-                    }
-                    if (seat == en - st) {
-                        for (int i1 = st - 1; i1 < en; i1++) {
-                            train.seatAlotted[i][i1] = ++allotted;
-                        }
-                        break;
-                    }
-                }
-            }
-            train.noOfSeatAlotted = allotted;
-        }
-        if(noOfPassengers!=availableTicket){
-            waitingList wl = new waitingList(train,(noOfPassengers-availableTicket),st,en);
-            waitingLis.add(wl);
-        }
-    }
+    // To book train
     static void bookTicket(){
         System.out.println("----- Ticket Booking -----");
         System.out.println("Enter Train Name : ");
@@ -318,6 +353,7 @@ public class Railway {
             }
         }
     }
+    // To cancel train
     static void ticketCancel() {
         System.out.println("Enter Train Name : ");
         sc.nextLine();String tName = sc.nextLine();
@@ -338,22 +374,51 @@ public class Railway {
         System.out.println("Ticket Canceled Successfully!");
         waitingAllot();
     }
-    public static void userSigning() {
-        System.out.println("----- You Have Chosen User Login ----- ");
-        System.out.println("Enter User Mobile No : ");
-        int usMobileNo = sc.nextInt();
-        System.out.println("Enter User Password : ");
-        sc.nextLine();String usPassword = sc.nextLine();
-        int pro=0;
-        for(int i=0;i<user.size();i++){
-            if(user.get(i).phoneNo==usMobileNo && user.get(i).password.equals(usPassword)){
-                UserFunction(i);
-                pro++;
-                break;
+    // waiting list function
+    static void waitingAllot(){
+        if(waitingLis.size()>0) {
+            for (waitingList waitingLi : waitingLis) {
+                int n = availTic(waitingLi.train, waitingLi.noOfPassengers, waitingLi.st, waitingLi.en);
+                if (n > 0) {
+                    WaitingLisAllot(waitingLi.train, waitingLi.noOfPassengers, waitingLi.st, waitingLi.en, n);
+                    waitingLis.remove(waitingLi);
+                }
             }
         }
-        if(pro==0) System.out.println("User ID and Password Mismatch! \nRetry!");
     }
+
+    //Admin actions
+    static void admin(){
+        System.out.println("Enter Your Name : ");
+        sc.nextLine();String aName = sc.nextLine();
+        System.out.println("Enter Your Password : ");
+        String aPassword = sc.nextLine();
+        if(aName.equals("admin")&&aPassword.equals("12345")) {
+            int adCh = 0;
+            do {
+                System.out.println("1.Username authentication");
+                System.out.println("2.Add Trains, Routes and Stations");
+                System.out.println("3.Declare Seats Availability");
+                System.out.println("4.View Train Details");
+                System.out.println("5.Exit");
+                System.out.println("Enter Choice : ");
+                adCh = sc.nextInt();
+                if (adCh == 1) {
+                    approveUser();
+                } else if (adCh == 2) {
+                    addTrain();
+                } else if (adCh == 3) {
+                    decSeat();
+                } else if (adCh == 4) {
+                    trainDetails();
+                } else if (adCh == 5) {
+                } else {
+                    System.out.println("Invalid Input");
+                }
+            } while (adCh != 4);
+        }else System.out.println("Incorrect Admin Name and Password!");
+    }
+    //User actions
     static void user(){
         int usOp=0;
         do {
@@ -363,42 +428,15 @@ public class Railway {
             System.out.println("3.Exit");
             System.out.println("Enter Choice : ");
             usOp = sc.nextInt();
-            switch (usOp){
-                case 1:
-                    userSignup();
-                    break;
-                case 2:
-                    userSigning();
-                    break;
-                case 3:
-                    break;
-                default:
-                    System.out.println("Invalid Input!");
-
+            if (usOp == 1) {
+                userSignup();
+            } else if (usOp == 2) {
+                userSigning();
+            } else if (usOp == 3) {
+            } else {
+                System.out.println("Invalid Input!");
             }
         }while(usOp!=3);
-    }
-    static void UserFunction(int u){
-        int usCh=0;
-        do{
-            System.out.println("1.View Trains and Availability");
-            System.out.println("2.Book Tickets");
-            System.out.println("3.Ticket Cancellation");
-            System.out.println("4.Exit");
-            System.out.println("Enter Choice : ");
-            usCh = sc.nextInt();
-            if(usCh == 1) {
-                viewTrains();
-            } else if (usCh == 2) {
-                viewTrains();
-                bookTicket();
-            } else if (usCh == 3) {
-                viewTrains();
-                ticketCancel();
-            } else {
-                System.out.println("Invalid Input");
-            }
-        }while (usCh!=4);
     }
 
     public static void main(String[] args) {
