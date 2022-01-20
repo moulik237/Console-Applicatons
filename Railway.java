@@ -332,12 +332,6 @@ public class Railway {
                         train.seatAlotted[seatNo - 1][j] = 0;
                     }
                 }
-                for (int i = 0; i < train.noOfSeat; i++) {
-                    for (int j = 0; j < train.noOfStation; j++) {
-                        System.out.print(train.seatAlotted[i][j]);
-                    }
-                    System.out.println();
-                }
                 break;
             }
         }
