@@ -1,0 +1,14 @@
+RAILWAY RESERVATION SYSTEM
+
+Module 1: Admin Login
+1.	Username authentication
+2.	Add Trains, Routes and Stations
+3.	Declare Seats Availability
+
+Module 2: User Login
+1.	Self Register new user.
+2.	View Trains and Availability
+3.	Book Tickets
+
+Important Note:
+	Booking array for station and passengers need to followed as efficient seat management system using a 2D array so that maximum occupancy is achieved.
