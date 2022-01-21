@@ -1,3 +1,7 @@
+// Admin Name : admin,Password : 12345;
+// Merchant ID : MID1,User Password : 12345;
+// User Mail ID : user1@gmail.com,User Password : 12345;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
