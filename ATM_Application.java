@@ -1,3 +1,6 @@
+// Admin Name : admin,Password : 12345;
+// User Name : Ram,Account Pin :14;
+
 import java.util.Scanner;
 
 class userdata {
@@ -202,7 +205,7 @@ class ATM {
     // user verification
     static void user() {
         System.out.println("----- You Have Chosen User Login -----");
-        System.out.println("Enter User Name and Password");
+        System.out.println("Enter User Name and Account Pin : ");
 
         String userName = sc.next();
         int userPassword = sc.nextInt();
