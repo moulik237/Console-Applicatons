@@ -48,12 +48,13 @@ class waitingList{
     int noOfPassengers;
     int st;
     int en;
-
+    
     waitingList(Train train, int noOfPassengers, int st, int en){
         this.train=train;
         this.noOfPassengers=noOfPassengers;
         this.st=st;
         this.en=en;
+        //this.availableTicket=availableTicket;
     }
 }
 public class Railway {
@@ -63,6 +64,7 @@ public class Railway {
     static ArrayList<ApprovalUser> appUser = new ArrayList<>();
     static ArrayList<waitingList> waitingLis = new ArrayList<>();
 
+    // <---------------- ADMIN --------------->
     // To approve/reject user login request,approved details will be added to userList,rejected details will be deleted from waitingLList
     static void approveUser(){
         int i=0;
@@ -125,6 +127,7 @@ public class Railway {
             System.out.println("Enter No Of Available Seats");
             int noOfS = sc.nextInt();
             trains.get(n - 1).noOfSeat = noOfS;
+            trains.get(n-1).seatAlotted=new int[noOfS][trains.get(n-1).noOfStation];
         }else System.out.println("Invalid Input!");
     }
     // To Display train details
@@ -152,6 +155,7 @@ public class Railway {
         }
     }
 
+    // <---------------- USER --------------->
     // Return available ticket Count
     static int availTic(Train train, int noOfPassengers, int st, int en){
         int availableTicket = 0;
@@ -342,10 +346,10 @@ public class Railway {
                             (noOfPassengers-availableTicket)+" : Seat Will be in WaitingList!");
                     else if(availableTicket==0) System.out.println("Ticket's are Not Available");
                 } else {
-                    System.out.println(availableTicket+" : Seats are Available "+(noOfPassengers-availableTicket));
+                    System.out.println(availableTicket+" : Seats are Available ");
                 }
 
-                System.out.println(availableTicket+" 1.Continue  2.Exit\nEnter Your choice : ");
+                System.out.println(" 1.Continue  2.Exit\nEnter Your choice : ");
                 if (sc.nextInt() == 1) {
                     allotTicket(train, noOfPassengers, st, en, availableTicket);
                 }
