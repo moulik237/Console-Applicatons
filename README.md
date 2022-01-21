@@ -20,7 +20,7 @@
   </tr>
   <tr>
     <td><b><a href="https://github.com/moulik237/Console-Applicatons/blob/main/Shopping_Application.java">Shoping Application</a><b></td>
-    <td>Amazon Shopping Application with real-time 
+    <td>Shopping Application with real-time 
         relevant cases Built using java</td>
   </tr>
   <tr>
