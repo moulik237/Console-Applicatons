@@ -81,16 +81,16 @@ class Products {
 }
 
 public class Shopping {
-    static Scanner sc = new Scanner(System.in);
-    public static ArrayList<User> userList = new ArrayList<>();
-    public static ArrayList<Merchant> merchantList = new ArrayList<>();
-    public static ArrayList<Approval> approvalList = new ArrayList<>();
-    public static ArrayList<Products> productList = new ArrayList<>();
-    public static ArrayList<Orders> orderList = new ArrayList<>();
+    Scanner sc = new Scanner(System.in);
+    static ArrayList<User> userList = new ArrayList<>();
+    static ArrayList<Merchant> merchantList = new ArrayList<>();
+    static ArrayList<Approval> approvalList = new ArrayList<>();
+    static ArrayList<Products> productList = new ArrayList<>();
+    static ArrayList<Orders> orderList = new ArrayList<>();
     static int userBill = 0;
 
     // To check Existing Business Name in merchantList,returns true if business name not found
-    public static boolean checkExistingMe(String name){
+    static boolean checkExistingMe(String name){
         for(int i=0;i<merchantList.size();i++){
             if(merchantList.get(i).businessName.equals(name)){
                 return false;
@@ -99,7 +99,7 @@ public class Shopping {
         return true;
     }
     // To check Existing Business Name in approvalList,returns true if business name not found
-    public static boolean checkExistingInUser(String mailId){
+    static boolean checkExistingInUser(String mailId){
         for(int i=0;i<userList.size();i++){
             if(userList.get(i).mailID.equals(mailId)){
                 return false;
@@ -108,7 +108,7 @@ public class Shopping {
         return true;
     }
     // To check Existing Business Name in approvalList,returns true if business name not found
-    public static boolean checkExistingInApproval(String name){
+    static boolean checkExistingInApproval(String name){
         for(int i=0;i<approvalList.size();i++){
             if(approvalList.get(i).businessName.equals(name)){
                 return false;
@@ -118,7 +118,7 @@ public class Shopping {
     }
 
     // To approve/reject merchant login request,approved details will be added to merchantList,rejected details will be deleted from approvalList
-    public static void merchantApproval() {
+    static void merchantApproval() {
         for(int i=0;i<approvalList.size();i++){
             if(approvalList.get(i).status.equals("No")){
                 System.out.println("Merchant Business Name : "+approvalList.get(i).businessName);
@@ -140,7 +140,7 @@ public class Shopping {
         System.out.println("No more Pending Approvals");
     }
     // To add merchant by admin,details will be added to merchantList
-    public static void addMerchant() {
+    static void addMerchant() {
         System.out.println("Enter Business Name : ");
         sc.nextLine();String bName = sc.nextLine();
         boolean flag = checkExistingMe(bName);
@@ -159,7 +159,7 @@ public class Shopping {
 
     }
     // To remove merchant by admin,details will be removed from merchantList
-    public static void removeMerchant() {
+    static void removeMerchant() {
         System.out.println("Enter Merchant Business Name to Remove : ");
         sc.nextLine();String merName = sc.nextLine();
         boolean flag = checkExistingMe(merName);
@@ -177,7 +177,7 @@ public class Shopping {
         }
     }
     // List all products in productList
-    public static void listAllProducts() {
+    static void listAllProducts() {
         System.out.println("S_No Product_Name Product_ID No_Of_Units Product_Price Discount_Price Merchant_ID");
         for(int i=0;i<productList.size();i++){
             if(productList.get(i).noOfUnits>0) {
@@ -190,7 +190,7 @@ public class Shopping {
     }
 
     // New merchant Sign in
-    public static void becomeMerchant() {
+    static void becomeMerchant() {
         System.out.println("Enter Business Name : ");
         sc.nextLine();
         String bName = sc.nextLine();
@@ -209,7 +209,7 @@ public class Shopping {
         }
     }
     // To get merchant ID
-    public static void getMerchantId(){
+    static void getMerchantId(){
         System.out.println("Enter Business Name to get ID : ");
         sc.nextLine();
         String bName = sc.nextLine();
@@ -243,7 +243,7 @@ public class Shopping {
         }
     }
     // Merchant Login verification
-    public static void merchantSigning() {
+    static void merchantSigning() {
         System.out.println("----- You Have Chosen Merchant Login ----- ");
         System.out.println("Enter Merchant ID : ");
         String merchantId = sc.next();
@@ -258,7 +258,7 @@ public class Shopping {
     }
 
     // return no of product's the user is selling
-    public static int noOfProduct(String k){
+    static int noOfProduct(String k){
         int n=0;
         for(int i=0;i<productList.size();i++){
             if(productList.get(i).merID.equals(k)){
@@ -268,7 +268,7 @@ public class Shopping {
         return n;
     }
     // Merchant function
-    public static void merchantFunction(int k){
+    static void merchantFunction(int k){
         int meOp = 0;
         do {
             System.out.println("----- Welcome Back -----");
@@ -303,7 +303,7 @@ public class Shopping {
         } while (meOp != 5);
     }
     // To add products by merchant,details will be added to productList
-    public static void addProducts(int k,int n){
+    static void addProducts(int k,int n){
         int pNo = n+101;
         System.out.println("Enter Product Name : ");
         sc.nextLine();String pName = sc.nextLine();
@@ -318,7 +318,7 @@ public class Shopping {
         productList.add(addProduct);
     }
     // To update product details by merchant,details will be updated in productList
-    public static void updateProduct(int k){
+    static void updateProduct(int k){
         int n = noOfProduct(merchantList.get(k).iD);
         if(n>0) {
             System.out.println("Enter product ID : ");
@@ -370,7 +370,7 @@ public class Shopping {
         }else System.out.println("No Product Found !");
     }
     // To remove products by merchant,details will be removed from productList
-    public static void removeProducts(int k){
+    static void removeProducts(int k){
         System.out.println("Enter product ID : ");
         sc.nextLine();String pId = sc.nextLine();
 
@@ -383,7 +383,7 @@ public class Shopping {
         System.out.println("product Removed Successfully!");
     }
     // Will list all products sold by merchant from productList
-    public static void listMyProduct(int k){
+    static void listMyProduct(int k){
         int n = noOfProduct(merchantList.get(k).iD);
         if(n>0) {
         String a = merchantList.get(k).iD;
@@ -400,7 +400,7 @@ public class Shopping {
     }
 
     // Return product index No in productList
-    public static int productId(String productId){
+    static int productId(String productId){
         int i;
         for(i=0;i<productList.size();i++){
             if(productId.equals(productList.get(i).productId)){
@@ -410,7 +410,7 @@ public class Shopping {
         return i;
     }
     // List All products and total cost in users cart from orderList
-    public static void viewProduct(int k){
+    static void viewProduct(int k){
         int total = 0;
         for(int i=0;i<orderList.size();i++){
             if(userList.get(k).usId.equals(orderList.get(i).userId)){
@@ -421,7 +421,7 @@ public class Shopping {
         System.out.println("Total Amount : Rs."+total+".00");
     }
     // Remove products in users cart from orderList
-    public static void removeProduct(int k){
+    static void removeProduct(int k){
         System.out.println("Enter Remove product ID or Enter 0 : ");
         sc.nextLine();
         String a = sc.nextLine();
@@ -434,7 +434,7 @@ public class Shopping {
     }
 
     // View cart and actions
-    public static void viewCart(int k) {
+    static void viewCart(int k) {
         int ch=0;
         do{
             System.out.println("1.Remove Products from cart");
@@ -466,7 +466,7 @@ public class Shopping {
         }while (ch!=3);
     }
     // Return product price
-    public static int productPrice(String productId){
+    static int productPrice(String productId){
         int price=0;
         for(int i=0;i<productList.size();i++){
             if(productId.equals(productList.get(i).productId)){
@@ -476,7 +476,7 @@ public class Shopping {
         return price;
     }
     // Return Product Name
-    public static String productName(String productId){
+    static String productName(String productId){
         String price="";
         for(int i=0;i<productList.size();i++){
             if(productId.equals(productList.get(i).productId)){
@@ -486,7 +486,7 @@ public class Shopping {
         return price;
     }
     // To add products to cart
-    public static void addToCart(int k){
+    static void addToCart(int k){
         int no=0;
         System.out.println("Enter no of Items : ");
         no = sc.nextInt();
@@ -503,7 +503,7 @@ public class Shopping {
         userBill = totalPrice(k);
     }
     // To Check Out
-    public static void checkOut(int k){
+    static void checkOut(int k){
         int total = 0;
         for(int i=0;i<orderList.size();i++) {
             if (userList.get(k).usId.equals(orderList.get(i).userId)) {
@@ -519,7 +519,7 @@ public class Shopping {
         System.out.println("Thanks for Shopping!");
     }
     // Return User Bill Amount
-    public static int totalPrice(int k){
+    static int totalPrice(int k){
         int total = 0;
         for(int i=0;i<orderList.size();i++){
             if(userList.get(k).usId.equals(orderList.get(i).userId)){
@@ -529,7 +529,7 @@ public class Shopping {
         return total;
     }
     // User actions
-    public static void UserFunction(int k){
+    static void UserFunction(int k){
         int usOp = 0;
         do {
             System.out.println("----- Welcome "+userList.get(k).name+" -----");
@@ -560,7 +560,7 @@ public class Shopping {
         } while (usOp != 4);
     }
     //User Sign in
-    public static void userSignup() {
+    static void userSignup() {
         System.out.println("Enter User Mail ID : ");
         sc.nextLine();String usMail = sc.nextLine();
         boolean flag = checkExistingInUser(usMail);
@@ -578,7 +578,7 @@ public class Shopping {
         }else System.out.println("User Mail ID Already Exist!");
     }
     //User Login
-    public static void userSigning() {
+    static void userSigning() {
         System.out.println("----- You Have Chosen User Login ----- ");
         System.out.println("Enter User Mail ID : ");
         String usMail = sc.next();
@@ -597,7 +597,7 @@ public class Shopping {
     }
 
     //Admin actions
-    public static void admin() {
+    static void admin() {
         System.out.println("----- You Have Chosen Admin Login -----");
         System.out.println("Enter Admin Name : ");
         String adminName = sc.next();
@@ -639,7 +639,7 @@ public class Shopping {
         }
     }
     //Merchant actions
-    public static void merchant(){
+    static void merchant(){
         int meOp=0;
         do{
         System.out.println("----- You Have Chosen Merchant Login -----");
@@ -667,7 +667,7 @@ public class Shopping {
         }while(meOp!=4);
     }
     //User actions
-    public static void user() {
+    static void user() {
         int usOp=0;
         do{
         System.out.println("----- You Have Chosen User Login -----");
