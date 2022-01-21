@@ -1,5 +1,5 @@
 // Admin Name : admin,Password : 12345;
-// User Name : Ram,Account Pin :14;
+// User Name : Ram,Account Pin : 14;
 
 import java.util.Scanner;
 
