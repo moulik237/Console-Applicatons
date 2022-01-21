@@ -1,3 +1,6 @@
+// Admin Name : admin,Password : 12345;
+// User Mobile No : 123456789,User Password : 12345;
+
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -453,6 +456,7 @@ public class Railway {
         trains.add(t1);
         int ch=0;
         do{
+            System.out.println("----- Welcome To Railway Reservation System -----");
             System.out.println("1.Admin Login");
             System.out.println("2.User Login");
             System.out.println("Enter Choice : ");
