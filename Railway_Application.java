@@ -459,6 +459,7 @@ public class Railway {
             System.out.println("----- Welcome To Railway Reservation System -----");
             System.out.println("1.Admin Login");
             System.out.println("2.User Login");
+            System.out.println("3.Exit");
             System.out.println("Enter Choice : ");
             ch = sc.nextInt();
             if (ch == 1) {
@@ -466,6 +467,7 @@ public class Railway {
             } else if (ch == 2) {
                 user();
             } else if (ch == 3) {
+                System.out.println("Thanks for Using!");
             } else {
                 System.out.println("Invalid Input");
             }
