@@ -315,7 +315,9 @@ public class Railway {
             } else if (usCh == 3) {
                 viewTrains();
                 ticketCancel();
-            } else {
+            } else if (usCh==4){
+                break;
+            }else {
                 System.out.println("Invalid Input");
             }
         }while (usCh!=4);
@@ -418,11 +420,12 @@ public class Railway {
                     decSeat();
                 } else if (adCh == 4) {
                     trainDetails();
-                } else if (adCh == 5) {
+                } else if (adCh == 5) { 
+                    break;
                 } else {
                     System.out.println("Invalid Input");
                 }
-            } while (adCh != 4);
+            } while (adCh != 5);
         }else System.out.println("Incorrect Admin Name and Password!");
     }
     //User actions
