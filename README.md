@@ -19,14 +19,18 @@
     <td>Console based ATM Application Built using java</td>
   </tr>
   <tr>
-    <td><b><a href="https://github.com/moulik237/Console-Applicatons/blob/main/Shopping_Application.java">Shoping Application</a><b></td>
+    <td><b><a href="https://github.com/moulik237/Console-Applicatons/blob/main/SHOPPING_Application.java">Shopping Application</a><b></td>
     <td>Shopping Application with real-time 
         relevant cases Built using java</td>
   </tr>
   <tr>
-    <td><b><a href="https://github.com/moulik237/Console-Applicatons/blob/main/Railway_Application.java">Railway Application</a><b></td>
+    <td><b><a href="https://github.com/moulik237/Console-Applicatons/blob/main/RAILWAY_Application.java">Railway Application</a><b></td>
     <td>Railway Reservation Application Built using java</td>
   </tr>
+  <tr>
+    <td><b><a href="https://github.com/moulik237/Console-Applicatons/blob/main/LIBRARY_Application.java">Library Application</a><b></td>
+    <td>Library Management Application Built using java</td>
+  </tr>   
 </table>
 
 </div>
