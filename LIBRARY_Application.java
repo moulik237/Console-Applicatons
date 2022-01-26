@@ -1,3 +1,4 @@
+package zoho4;
 import java.util.*;
 import java.time.LocalDate;
 import java.time.*;
@@ -20,7 +21,6 @@ class Book{
         this.isbn=isbn;
     }
 }
-
 class Borrow{
     String bName;
     String isbn;
@@ -28,7 +28,6 @@ class Borrow{
     LocalDate boDate;
     LocalDate  reDate;
 
-  
     Borrow(String bName,String isbn,String uID,LocalDate boDate,LocalDate reDate){
         this.bName=bName;
         this.isbn=isbn;
@@ -37,7 +36,6 @@ class Borrow{
         this.reDate=reDate;
     }
 }
-
 class User{
     String uName;
     String uPassword;
@@ -45,7 +43,6 @@ class User{
     String uID;
     ArrayList <Borrow> bookH;
 
-  
     User(String uName, String uPassword, double uWallet, String uID,ArrayList <Borrow> bookH){
         this.uName=uName;
         this.uPassword=uPassword;
@@ -61,6 +58,7 @@ public class Library {
     static ArrayList<Borrow> borrowList = new ArrayList<Borrow>();
     static Scanner sc = new Scanner(System.in);
 
+
     static void ViewBook() {
         System.out.printf(" %-23s|| %-15s|| %-11s|| %-5s|| %-13s||\n", "Book Title", "Author Name", "Book Price", "ISBN", "Availability");
         String avail = "No";
@@ -69,6 +67,9 @@ public class Library {
             System.out.printf(" %-23s|| %-15s|| %-11s|| %-5s|| %-13s||\n", book.bName, book.author, book.bPrice, book.isbn, avail);
         }
         System.out.println("<-------------------------------------------------------------------------------->");
+//        System.out.println("Press Enter to continue...");
+//        sc.nextLine();
+//        String d=sc.nextLine();
     }
     private static void SearchBook() {
         System.out.println("Enter Book Title/ISBN no ");
@@ -176,7 +177,7 @@ public class Library {
     private static void BorrowersDetails() {
         System.out.printf(" %-23s|| %-5s|| %-10s|| %-13s|| %-13s||\n", "Book Title", "ISBN", "User ID", "Borrow Date", "Ex-ReDate");
         for (Borrow borrow : borrowList) {
-            System.out.printf(" %-23s|| %-5s|| %-13s|| %-13s||\n", borrow.bName, borrow.isbn, borrow.uID, borrow.boDate, borrow.reDate);
+            System.out.printf(" %-23s|| %-5s|| %-10s|| %-13s|| %-13s||\n", borrow.bName, borrow.isbn, borrow.uID, borrow.boDate, borrow.reDate);
         }
     }
     private static void RemoveUs() {
@@ -200,6 +201,7 @@ public class Library {
             System.out.println("User ID Not Found!");
         }
     }
+    
 
     static boolean checkExistingInUser(String name) {
         for (User user : userList) {
@@ -269,7 +271,7 @@ public class Library {
                     borrowHistory(user);
                     break;
                 case 4:
-                    bookReturn(user);
+                    Return(user);
                     break;
                 case 5:
                     walletBalance(user);
@@ -282,11 +284,21 @@ public class Library {
             }
         } while (ch != 6);
     }
+    private static int len(User user){
+        int c=0;
+        for (int i = 0; i < borrowList.size(); i++) {
+            if(borrowList.get(i).uID.equals(user.uID)){
+                c++;
+            }
+        }
+        return c;
+    }
     private static void borrowBook(User user) {
         System.out.print("Enter the number of bookings : ");
         int boNo = sc.nextInt();
-        if (boNo > 3) {
-            System.out.println("One time borrow limit is 3 ");
+        int k = len(user);
+        if (k+boNo>3) {
+            System.out.println("User Book borrow limit is 3 ");
         } else {
             System.out.println("Enter Book ISBN no ");
             String[] bISBN = new String[boNo];
@@ -297,42 +309,83 @@ public class Library {
             for (String bK : bISBN) {
                 for (Book book : bookList) {
                     if (book.isbn.equals(bK)) {
-                        if (user.uWallet > 500 && user.uWallet > book.bPrice) {
-                            System.out.print("Enter OK to Borrow '" + book.bName + "' Book ");
-                            String d = sc.next().toUpperCase(Locale.ROOT).trim();
-                            if (d.equals("OK")) {
-                                Period diff;
-                                boolean flag = true;
-                                do {
-                                    System.out.println("Enter expected Return Date(yyyy-mm-dd) : ");
-                                    sc.nextLine();
-                                    LocalDate reDate = LocalDate.parse(sc.next());
-                                    LocalDate boDate = LocalDate.now();
-                                    diff = Period.between(boDate, reDate);
-                                    if (diff.getDays() > 1) {
-                                        borrowList.add(new Borrow(book.bName, book.isbn, user.uID, boDate, reDate));
-                                        user.bookH.add(new Borrow(book.bName, book.isbn, user.uID, boDate, reDate));
-                                        user.uWallet -= book.bPrice;
-                                        System.out.println(book.bName + " Book borrowed Successfully!");
-                                        flag = false;
-                                    } else System.out.println("Invalid return Date!!");
-                                } while (flag);
+                        boolean fag = checkBk(user,bK);
+                        if(fag){
+                            if (user.uWallet > 500 && user.uWallet > book.bPrice) {
+                                System.out.print("Enter OK to Borrow '" + book.bName + "' Book ");
+                                String d = sc.next().toUpperCase(Locale.ROOT).trim();
+                                if (d.equals("OK")) {
+                                    Period diff;
+                                    boolean flag = true;
+                                    do {
+                                        System.out.println("Enter expected Return Date(yyyy-mm-dd) : ");
+                                        sc.nextLine();
+                                        LocalDate reDate = LocalDate.parse(sc.next());
+                                        LocalDate boDate = LocalDate.now();
+                                        diff = Period.between(boDate, reDate);
+                                        if (diff.getDays() > 1) {
+                                            borrowList.add(new Borrow(book.bName, book.isbn, user.uID, boDate, reDate));
+                                            user.bookH.add(new Borrow(book.bName, book.isbn, user.uID, boDate, reDate));
+                                            System.out.println("'"+book.bName + "' Book borrowed Successfully!");
+                                            book.borrowCount++;
+                                            book.availUnits--;
+                                            flag = false;
+                                        } else System.out.println("Invalid return Date!!");
+                                    } while (flag);
+                                }
+                            } else {
+                                System.out.println("Your Wallet balance is too low! To purchase your Order!!");
                             }
-                        } else {
-                            System.out.println("Your Wallet balance is too low! To purchase your Order!!");
+                        }else {
+                            System.out.println("'" + bK + "' Book Already Borrowed yet to return");
                         }
                     }
                 }
             }
         }
     }
+    private static boolean checkBk(User user,String bK) {
+
+        for (int i = 0; i < borrowList.size(); i++) {
+            if (borrowList.get(i).isbn.equals(bK) && borrowList.get(i).uID.equals(user.uID) ) {
+                return false;
+            }
+        }
+        return true;
+    }
     private static void borrowHistory(User user) {
-        System.out.printf(" %-23s|| %-5s|| %-13s|| %-13s||\n", "Book Title", "ISBN", "Borrow Date", "ReDate");
+        System.out.printf(" %-23s|| %-5s|| %-13s|| %-13s|| %-16s||\n", "Book Title", "ISBN", "Borrow Date", "ReDate", "Status");
         for (int i = 0; i < user.bookH.size(); i++) {
-            System.out.printf(" %-23s|| %-5s|| %-13s|| %-13s||\n", user.bookH.get(i).bName, user.bookH.get(i).isbn, user.bookH.get(i).boDate, user.bookH.get(i).reDate);
+            String s="Book Returned";
+            for (Borrow borrow : borrowList) {
+                if (user.bookH.get(i).isbn.equals(borrow.isbn)) {
+                    s = "Yet to Return";
+                    break;
+                }
+            }
+            System.out.printf(" %-23s|| %-5s|| %-13s|| %-13s|| %-16s||\n", user.bookH.get(i).bName, user.bookH.get(i).isbn, user.bookH.get(i).boDate, user.bookH.get(i).reDate,s);
         }
     }
-    private static void bookReturn(User user) {
+    private static void Return(User user) {
+        int ch=0;
+        do{
+            System.out.println("1.Return Book");
+            System.out.println("2.Book Miss");
+            System.out.println("Enter Your Choice : ");
+            ch = sc.nextInt();
+            switch (ch){
+                case 1:
+                    bookReturn(user);
+                    break;
+                case 2:
+                    bookMiss(user);
+                default:
+                    System.out.println("Invalid Input!,Retry!!");
+            }
+
+        }while(ch>2);
+    }
+    private static void bookReturn(zoho4.User user) {
         System.out.println("----- Book Return -----");
         System.out.print("Enter the number of return book : ");
         int boNo = sc.nextInt();
@@ -343,7 +396,7 @@ public class Library {
             bISBN[i] = sc.next();
         }
         for (String bK : bISBN) {
-            for (Book book : bookList) {
+            for (zoho4.Book book : bookList) {
                 if (book.isbn.equals(bK)) {
                     int j = 1000;
                     for (int i = 0; i < user.bookH.size(); i++) {
@@ -365,12 +418,14 @@ public class Library {
                             if (diff.getDays() > 15) {
                                 int n = diff.getDays() - 15;
                                 double nAmt = n * 2;
-                                user.uWallet += book.bPrice - nAmt;
-                                System.out.println("Your Fined Amount Rs." + nAmt + " due to exceed of returning date.");
-                                user.bookH.get(j).reDate = Date;
-                                book.availUnits++;
-                            } else {
-                                user.uWallet += book.bPrice;
+                                if(nAmt<book.bPrice*0.5) {
+                                    user.uWallet += book.bPrice - nAmt;
+                                    System.out.println("Your Fined Amount Rs." + nAmt + " due to exceed of returning date.");
+                                }
+                                else {
+                                    user.uWallet -=book.bPrice*0.5;
+                                    System.out.println("You have been fined : "+book.bPrice*0.5);
+                                }
                             }
                             for (int i = 0; i < borrowList.size(); i++) {
                                 if (borrowList.get(i).isbn.equals(bK) && borrowList.get(i).uID.equals(user.uID) ) {
@@ -378,8 +433,40 @@ public class Library {
                                     break;
                                 }
                             }
+                            user.bookH.get(j).reDate = Date;
+                            book.availUnits++;
                             System.out.println("Book Returned Successfully ");
                         }
+                    }
+                }
+            }
+        }
+    }
+    private static void bookMiss(User user) {
+        System.out.print("Enter the number of Missed book : ");
+        int boNo = sc.nextInt();
+        System.out.println("Enter Book ISBN no ");
+        String[] bISBN = new String[boNo];
+        for (int i = 0; i < boNo; i++) {
+            System.out.print((i + 1) + ". ");
+            bISBN[i] = sc.next();
+        }
+        for (String bK : bISBN) {
+            for (Book book : bookList) {
+                if (book.isbn.equals(bK)) {
+                    int j = 1000;
+                    for (int i = 0; i < user.bookH.size(); i++) {
+                        if (user.bookH.get(i).isbn.equals(bK)) {
+                            j = i;
+                            break;
+                        }
+                    }
+                    if (j == 1000) {
+                        System.out.println(bK + " Book is not Borrowed please Try again");
+                        break;
+                    } else {
+                        user.uWallet -=book.bPrice*0.5;
+                        System.out.println("You have been fined : "+book.bPrice*0.5);
                     }
                 }
             }
@@ -405,7 +492,7 @@ public class Library {
                 System.out.println("4.Delete a Book");
                 System.out.println("5.Modify Book Details");
                 System.out.println("6.Borrow Details");
-                System.out.println("7.Borrow Details");
+                System.out.println("7.Remove User");
                 System.out.println("8.Exit");
                 System.out.println("Enter Choice : ");
                 adCh = sc.nextInt();
@@ -437,7 +524,7 @@ public class Library {
                         System.out.println("Invalid Input! Retry!!");
                         break;
                 }
-            } while (adCh != 7);
+            } while (adCh != 8);
         }else {
             System.out.println("Incorrect Admin Name and Password! Retry!!");
             admin();
