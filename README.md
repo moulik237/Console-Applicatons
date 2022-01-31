@@ -30,8 +30,12 @@
   <tr>
     <td><b><a href="https://github.com/moulik237/Console-Applicatons/blob/main/LIBRARY_Application.java">Library Application</a><b></td>
     <td>Library Management Application Built using java</td>
-  </tr>   
-</table>
+  </tr>  
+  <tr>
+    <td><b><a href="https://github.com/moulik237/Console-Applicatons/blob/main/Vehicle_Rental_Application">Vehicle Rental Application</a><b></td>
+    <td>Vehicle Rental Application Built using java</td>
+  </tr>     
+</table> 
 
 </div>
 <br>
