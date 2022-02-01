@@ -28,7 +28,7 @@
     <td>Railway Reservation Application Built using java</td>
   </tr>
   <tr>
-    <td><b><a href="https://github.com/moulik237/Console-Applicatons/blob/main/LIBRARY_Application.java">Library Application</a><b></td>
+    <td><b><a href="https://github.com/moulik237/Console-Applicatons/blob/main/Library_Application.java">Library Application</a><b></td>
     <td>Library Management Application Built using java</td>
   </tr>  
   <tr>
