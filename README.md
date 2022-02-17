@@ -32,7 +32,7 @@
     <td>Library Management Application Built using java</td>
   </tr>  
   <tr>
-    <td><b><a href="https://github.com/moulik237/Console-Applicatons/blob/main/Vehicle_Rental_Application">Vehicle Rental Application</a><b></td>
+    <td><b><a href="https://github.com/moulik237/Console-Applicatons/blob/main/Vehicle_Rental_Application.java">Vehicle Rental Application</a><b></td>
     <td>Vehicle Rental Application Built using java</td>
   </tr>     
 </table> 
