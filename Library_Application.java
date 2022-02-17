@@ -1,3 +1,5 @@
+// Admin Name : admin,Password : 12345;
+// User Name : Moulik,Password : 12345;
 
 import java.util.*;
 import java.time.LocalDate;
@@ -58,7 +60,7 @@ public class Library {
     static ArrayList<Borrow> borrowList = new ArrayList<Borrow>();
     static Scanner sc = new Scanner(System.in);
 
-
+    //To view all book
     static void ViewBook() {
         System.out.printf(" %-23s|| %-15s|| %-11s|| %-5s|| %-13s||\n", "Book Title", "Author Name", "Book Price", "ISBN", "Availability");
         String avail = "No";
@@ -67,10 +69,8 @@ public class Library {
             System.out.printf(" %-23s|| %-15s|| %-11s|| %-5s|| %-13s||\n", book.bName, book.author, book.bPrice, book.isbn, avail);
         }
         System.out.println("<-------------------------------------------------------------------------------->");
-//        System.out.println("Press Enter to continue...");
-//        sc.nextLine();
-//        String d=sc.nextLine();
     }
+    // To view book details by its ID/Name
     private static void SearchBook() {
         System.out.println("Enter Book Title/ISBN no ");
         sc.nextLine();
@@ -89,6 +89,7 @@ public class Library {
             System.out.println("Enter correct Book Name/ISBN no");
         }
     }
+    // To add a new book
     private static void AddBook() {
         System.out.println("Enter Book Title : ");
         String bName = sc.nextLine().trim();
@@ -102,6 +103,7 @@ public class Library {
         bookList.add(new Book(bName, author, availUnit, 0, bPrice, isbn));
         System.out.println("Book Added Successfully!!");
     }
+    //To Delete book
     private static void DeleteBook() {
         System.out.println("Enter Book Title/ISBN no to Delete");
         sc.nextLine();
@@ -121,6 +123,7 @@ public class Library {
             System.out.println("Enter correct Book Name/ISBN no,Retry!!");
         }
     }
+    // To modify book details
     private static void ModifyBookDetails() {
         System.out.println("Enter Book Title/ISBN no ");
         sc.nextLine();
@@ -174,12 +177,14 @@ public class Library {
             System.out.println("Enter correct Book Name/ISBN no,Retry!!");
         }
     }
+    //To view borrowers details
     private static void BorrowersDetails() {
         System.out.printf(" %-23s|| %-5s|| %-10s|| %-13s|| %-13s||\n", "Book Title", "ISBN", "User ID", "Borrow Date", "Ex-ReDate");
         for (Borrow borrow : borrowList) {
             System.out.printf(" %-23s|| %-5s|| %-10s|| %-13s|| %-13s||\n", borrow.bName, borrow.isbn, borrow.uID, borrow.boDate, borrow.reDate);
         }
     }
+    //To remove a user
     private static void RemoveUs() {
         System.out.println("Enter User ID : ");
         sc.nextLine();
@@ -202,13 +207,14 @@ public class Library {
         }
     }
     
-
+    //To check existing user
     static boolean checkExistingInUser(String name) {
         for (User user : userList) {
             if (user.uName.equals(name)) return false;
         }
         return true;
     }
+    //User Sign in
     private static void userSignup() {
         System.out.println("Enter User Name : ");
         sc.nextLine();
@@ -229,6 +235,7 @@ public class Library {
             System.out.println("Account Created Successfully!");
         } else System.out.println("User Name Already Exist!");
     }
+    //User Login
     private static void userSigning() {
         System.out.println("Enter User Name : ");
         sc.nextLine();
@@ -247,6 +254,7 @@ public class Library {
             System.out.println("Enter correct User Name and Password!,Retry!!");
         }
     }
+    // User actions
     private static void UserFunction(User user) {
         int ch;
         do {
@@ -284,15 +292,17 @@ public class Library {
             }
         } while (ch != 6);
     }
+    //Return user's book borrow count
     private static int len(User user){
         int c=0;
-        for (int i = 0; i < borrowList.size(); i++) {
-            if(borrowList.get(i).uID.equals(user.uID)){
+        for (Borrow borrow : borrowList) {
+            if (borrow.uID.equals(user.uID)) {
                 c++;
             }
         }
         return c;
     }
+    //To borrow book
     private static void borrowBook(User user) {
         System.out.print("Enter the number of bookings : ");
         int boNo = sc.nextInt();
@@ -344,6 +354,7 @@ public class Library {
             }
         }
     }
+    //To check whether the user borrowed this book already or not
     private static boolean checkBk(User user,String bK) {
 
         for (int i = 0; i < borrowList.size(); i++) {
@@ -353,6 +364,7 @@ public class Library {
         }
         return true;
     }
+    //To view user's borrow history
     private static void borrowHistory(User user) {
         System.out.printf(" %-23s|| %-5s|| %-13s|| %-13s|| %-16s||\n", "Book Title", "ISBN", "Borrow Date", "ReDate", "Status");
         for (int i = 0; i < user.bookH.size(); i++) {
@@ -366,6 +378,7 @@ public class Library {
             System.out.printf(" %-23s|| %-5s|| %-13s|| %-13s|| %-16s||\n", user.bookH.get(i).bName, user.bookH.get(i).isbn, user.bookH.get(i).boDate, user.bookH.get(i).reDate,s);
         }
     }
+    //To return book functions
     private static void Return(User user) {
         int ch=0;
         do{
@@ -385,6 +398,7 @@ public class Library {
 
         }while(ch>2);
     }
+    //To return book
     private static void bookReturn(zoho4.User user) {
         System.out.println("----- Book Return -----");
         System.out.print("Enter the number of return book : ");
@@ -442,6 +456,7 @@ public class Library {
             }
         }
     }
+    //missed book
     private static void bookMiss(User user) {
         System.out.print("Enter the number of Missed book : ");
         int boNo = sc.nextInt();
@@ -470,12 +485,20 @@ public class Library {
                     }
                 }
             }
+            for (int i = 0; i < borrowList.size(); i++) {
+                if (borrowList.get(i).isbn.equals(bK) && borrowList.get(i).uID.equals(user.uID) ) {
+                    borrowList.remove(i);
+                    break;
+                }
+            }
         }
     }
+    //To check user's wallet balance
     private static void walletBalance(User user) {
         System.out.println("User Name : "+user.uName+"\nUser wallet Balance : "+user.uWallet);
     }
 
+    //Admin actions
     static void admin(){
         System.out.println("----- You Have Chosen ADMIN Login -----");
         System.out.println("Enter Admin Name : ");
@@ -530,6 +553,7 @@ public class Library {
             admin();
         }
     }
+    //User
     static void user(){
         int usOp=0;
         do{
@@ -554,6 +578,7 @@ public class Library {
             }
         }while(usOp!=3);
     }
+
     public static void main(String[] args) {
         bookList.add(new Book("Da Vinci Code","Brown",10,0,100,"BK1"));
         bookList.add(new Book("Harry Potter","Rowling",10,0,200,"BK2"));
